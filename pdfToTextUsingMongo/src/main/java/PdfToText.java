@@ -1,11 +1,11 @@
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
-import javax.sound.midi.Soundbank;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Example program to verify the setup of pdfbox libraries
@@ -36,12 +36,12 @@ public class PdfToText {
     public HashMap<String,Integer> dictionary;
 
 
-    public  PdfToText(String filename){
+    public PdfToText(String filename){
         this.filename=filename;
         this.text=null;
         this.dictionary=null;
     }
-    public PdfToText(String filename,HashMap<String,Integer> dictionary)
+    public PdfToText(String filename, HashMap<String,Integer> dictionary)
     {
         this.filename=filename;
         this.dictionary=dictionary;
@@ -87,7 +87,7 @@ public class PdfToText {
 
     }
 
-    String getTextfromPDF()throws IOException{
+    String getTextfromPdf()throws IOException{
         getTextHelper();
         return this.text;
     }
@@ -115,7 +115,10 @@ public class PdfToText {
         for (int i = 0; i < listOfWords.length; i++)
         {
             if (!(uniqueWords.contains (listOfWords[i]))) {
-                uniqueWords.add(listOfWords[i]);
+                    if(listOfWords[i].contains("."))
+                        continue;   // TO store hashmap in mongodb
+                    else
+                        uniqueWords.add(listOfWords[i]);
             }
         }
 //        for (String word:uniqueWords) {
@@ -135,12 +138,13 @@ public class PdfToText {
             }
             countOfWords[i]=count;
         }
-        HashMap<String,Integer> tempDictionary=new HashMap<>();
+        HashMap<String,Integer> tempDictionary=new HashMap<String,Integer>();
         for (int i=0;i<uniqueWords.size();i++)
         {
             tempDictionary.put(uniqueWords.get(i),countOfWords[i]);
         }
         this.dictionary=tempDictionary;
+
 
     }
 
@@ -156,7 +160,7 @@ public class PdfToText {
 
     }
 
-    public static float comparePdf(PdfToText obj1,PdfToText obj2) throws EmptyDictionaryException
+    public static float comparePdf(PdfToText obj1, PdfToText obj2) throws EmptyDictionaryException
     {
         if(obj1.dictionary==null||obj2.dictionary==null)
             throw new EmptyDictionaryException();

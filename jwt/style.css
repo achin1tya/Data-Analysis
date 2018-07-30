@@ -1,0 +1,18 @@
+body {
+  font-family: Arial;
+  background: #222;
+  font-size: 14px;
+  color: #bbb;
+}
+
+#header {
+  color: green;
+}
+
+#payload {
+  color: orange;
+}
+
+#signature {
+  color: red;
+}
